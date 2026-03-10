@@ -2,15 +2,12 @@ package com.example.ticket.domain.concert.service;
 
 import com.example.ticket.domain.concert.dto.response.ConcertDetailResponseDto;
 import com.example.ticket.domain.concert.dto.response.ConcertResponseDto;
-import com.example.ticket.domain.concert.dto.response.ConcertScheduleResponseDto;
 import com.example.ticket.domain.concert.entity.Concert;
 import com.example.ticket.domain.concert.entity.ConcertTime;
 import com.example.ticket.domain.concert.repository.ConcertRepository;
-import com.example.ticket.domain.concert.repository.ConcertTimeRespository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +18,6 @@ import java.util.stream.Collectors;
 public class ConcertService {
 
     private final ConcertRepository concertRepository;
-    private final ConcertTimeRespository concertTimeRespository;
 
     //존재하는 콘서트 리스트 가져오기
     public List<ConcertResponseDto> getConcertList() {
