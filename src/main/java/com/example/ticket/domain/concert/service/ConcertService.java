@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,13 +30,13 @@ public class ConcertService {
         List<Concert> list = concertRepository.findByList(now);
         List<ConcertResponseDto> list_dto = new ArrayList<>();
 
-        for(Concert c: list){
+        for (Concert c : list) {
             list_dto.add(ConcertResponseDto.builder()
-                        .title(c.getTitle())
-                        .location(c.getLocation())
-                        .progressTime(c.getProgressTime())
-                        .imgURL(c.getImgURL())
-                        .build());
+                    .title(c.getTitle())
+                    .location(c.getLocation())
+                    .progressTime(c.getProgressTime())
+                    .imgURL(c.getImgURL())
+                    .build());
         }
 
         return list_dto;
@@ -45,8 +46,7 @@ public class ConcertService {
         //아이디 값을 가진 concert존재하는 지 확인
         LocalDateTime now = LocalDateTime.now();
 
-        Concert concert = concertRepository.findById(concertId).orElse(null);
-        List<LocalDateTime> time = concertTimeRespository.findByConcertId(now, concertId);;
+        Concert concert = concertRepository.findAllWithSchedule(concertId);
 
         return ConcertDetailResponseDto.builder()
                 .title(concert.getTitle())
@@ -54,9 +54,11 @@ public class ConcertService {
                 .progressTime(concert.getProgressTime())
                 .location(concert.getLocation())
                 .imgURL(concert.getImgURL())
-                .scheduleDate(time)
+                .scheduleDate(concert.getSchedule().stream()
+                        .map(ConcertTime::getSchedulePart)
+                        .collect(Collectors.toList()))
                 .build();
     }
-
+}
 
 
