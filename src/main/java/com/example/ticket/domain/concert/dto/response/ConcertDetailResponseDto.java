@@ -16,5 +16,5 @@ public class ConcertDetailResponseDto {
     private Long progressTime;
     private String location;
     private String imgURL;
-    private List<ConcertScheduleResponseDto> scheduleDate;
+    private List<LocalDateTime> scheduleDate;
 }

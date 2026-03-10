@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -49,5 +51,8 @@ public class Concert {
 
     @Column(name = "imgURL")
     private String imgURL;
+
+    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL)
+    private List<ConcertTime> schedule = new ArrayList<>();
 
 }

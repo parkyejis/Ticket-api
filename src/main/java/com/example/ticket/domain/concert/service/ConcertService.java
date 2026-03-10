@@ -1,12 +1,18 @@
 package com.example.ticket.domain.concert.service;
 
+import com.example.ticket.domain.concert.dto.response.ConcertDetailResponseDto;
 import com.example.ticket.domain.concert.dto.response.ConcertResponseDto;
+import com.example.ticket.domain.concert.dto.response.ConcertScheduleResponseDto;
+import com.example.ticket.domain.concert.entity.Concert;
+import com.example.ticket.domain.concert.entity.ConcertTime;
 import com.example.ticket.domain.concert.repository.ConcertRepository;
+import com.example.ticket.domain.concert.repository.ConcertTimeRespository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,10 +23,22 @@ public class ConcertService {
     private final ConcertTimeRespository concertTimeRespository;
 
     //존재하는 콘서트 리스트 가져오기
-    public void getConcertList() {
+    public List<ConcertResponseDto> getConcertList() {
         //검사해줘야하는 것 end 날짜가 지났는지 확인
         LocalDateTime now = LocalDateTime.now();
-        List<ConcertResponseDto> list = concertRepository.findByList(now);
+        List<Concert> list = concertRepository.findByList(now);
+        List<ConcertResponseDto> list_dto = new ArrayList<>();
+
+        for(Concert c: list){
+            list_dto.add(ConcertResponseDto.builder()
+                        .title(c.getTitle())
+                        .location(c.getLocation())
+                        .progressTime(c.getProgressTime())
+                        .imgURL(c.getImgURL())
+                        .build());
+        }
+
+        return list_dto;
     }
 
     public ConcertDetailResponseDto getConcertDetail(Long concertId) {
@@ -28,7 +46,7 @@ public class ConcertService {
         LocalDateTime now = LocalDateTime.now();
 
         Concert concert = concertRepository.findById(concertId).orElse(null);
-        List<ConcertScheduleResponseDto> time = concertTimeRespository.findByConcertId(now, concertId);;
+        List<LocalDateTime> time = concertTimeRespository.findByConcertId(now, concertId);;
 
         return ConcertDetailResponseDto.builder()
                 .title(concert.getTitle())
