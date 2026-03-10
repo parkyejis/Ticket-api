@@ -14,6 +14,7 @@ import java.util.List;
 public class ConcertService {
 
     private final ConcertRepository concertRepository;
+    private final ConcertTimeRespository concertTimeRespository;
 
     //존재하는 콘서트 리스트 가져오기
     public void getConcertList() {
@@ -21,4 +22,23 @@ public class ConcertService {
         LocalDateTime now = LocalDateTime.now();
         List<ConcertResponseDto> list = concertRepository.findByList(now);
     }
-}
+
+    public ConcertDetailResponseDto getConcertDetail(Long concertId) {
+        //아이디 값을 가진 concert존재하는 지 확인
+        LocalDateTime now = LocalDateTime.now();
+
+        Concert concert = concertRepository.findById(concertId).orElse(null);
+        List<ConcertScheduleResponseDto> time = concertTimeRespository.findByConcertId(now, concertId);;
+
+        return ConcertDetailResponseDto.builder()
+                .title(concert.getTitle())
+                .Detail(concert.getDetail())
+                .progressTime(concert.getProgressTime())
+                .location(concert.getLocation())
+                .imgURL(concert.getImgURL())
+                .scheduleDate(time)
+                .build();
+    }
+
+
+

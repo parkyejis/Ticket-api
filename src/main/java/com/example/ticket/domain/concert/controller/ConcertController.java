@@ -25,9 +25,9 @@ public class ConcertController {
         concertService.getConcertList();
     }
 
-    @GetMapping("/detail")
-    public void getConcertDetail(){
-        concertService.getConcertDetail();
+    @GetMapping("/detail/{concert-id}")
+    public void getConcertDetail(@PathVariable(value="concert-id") Long concertId){
+        concertService.getConcertDetail(concertId);
     }
 
     //수정하기
