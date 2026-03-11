@@ -6,11 +6,16 @@ import com.example.ticket.domain.concert.dto.response.ConcertResponseDto;
 import com.example.ticket.domain.concert.entity.Concert;
 import com.example.ticket.domain.concert.entity.ConcertTime;
 import com.example.ticket.domain.concert.repository.ConcertRepository;
+import com.example.ticket.domain.concert.repository.ConcertTimeRepository;
+import com.example.ticket.domain.seat.entity.Grade;
+import com.example.ticket.domain.seat.entity.Level;
+import com.example.ticket.domain.seat.repostiory.GradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +24,8 @@ import java.util.stream.Collectors;
 public class ConcertService {
 
     private final ConcertRepository concertRepository;
+    private final ConcertTimeRepository concertTimeRepository;
+    private final GradeRepository gradeRepository;
 
     //존재하는 콘서트 리스트 가져오기
     public List<ConcertResponseDto> getConcertList() {
@@ -58,7 +65,41 @@ public class ConcertService {
     }
 
     public void createConcert(ConcertRequestDto dto) {
+        //공연 정보를 받아서 공연 엔티티 생성
+        Concert concert = Concert.builder()
+                .title(dto.getTitle())
+                .Detail(dto.getConcertDetail())
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .progressTime(dto.getProgressTime())
+                .imgURL(dto.getImgURL()).build();
 
+        concertRepository.save(concert);
+
+        //스케줄 list를 이용해서 스케줄 모두 저장
+        List<LocalDateTime> list = dto.getScheduleDate();
+        List<ConcertTime> concertTimes = new ArrayList<>();
+        for(LocalDateTime sch: list){
+            concertTimes.add(ConcertTime.builder()
+                    .schedulePart(sch)
+                    .concert(concert)
+                    .build());
+        }
+        concertTimeRepository.saveAll(concertTimes);
+
+        //등급별 가격 각각 저장
+        List<Grade> grades = new ArrayList<>();
+        HashMap<Level, Long> hash = dto.getPrice();
+        for(Level level : hash.keySet()){
+
+
+            grades.add(Grade.builder()
+                    .level(level)
+                    .price(hash.get(level))
+                    .concert(concert)
+                    .build());
+        }
+        gradeRepository.saveAll(grades);
     }
 }
 

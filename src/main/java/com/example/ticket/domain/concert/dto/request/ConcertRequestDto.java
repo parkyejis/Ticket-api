@@ -17,8 +17,8 @@ import java.util.List;
 public class ConcertRequestDto {
     private final String title;
     private final String concertDetail;
-    private final LocalDate startDate;
-    private final LocalDate endDate;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
     private final Long progressTime;
     private final String imgURL;
 
