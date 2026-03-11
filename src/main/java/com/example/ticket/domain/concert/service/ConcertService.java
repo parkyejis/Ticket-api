@@ -14,6 +14,7 @@ import com.example.ticket.domain.seat.repostiory.GradeRepository;
 import com.example.ticket.domain.seat.repostiory.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class ConcertService {
     private final SeatRepository seatRepository;
 
     //존재하는 콘서트 리스트 가져오기
+    @Transactional(readOnly = true)
     public List<ConcertResponseDto> getConcertList() {
         //검사해줘야하는 것 end 날짜가 지났는지 확인
         LocalDateTime now = LocalDateTime.now();
@@ -50,6 +52,7 @@ public class ConcertService {
         return list_dto;
     }
 
+    @Transactional(readOnly = true)
     public ConcertDetailResponseDto getConcertDetail(Long concertId) {
         //아이디 값을 가진 concert존재하는 지 확인
         LocalDateTime now = LocalDateTime.now();
@@ -68,6 +71,7 @@ public class ConcertService {
                 .build();
     }
 
+    @Transactional
     public void createConcert(ConcertRequestDto dto) {
         //공연 정보를 받아서 공연 엔티티 생성
         Concert concert = Concert.builder()
