@@ -9,7 +9,9 @@ import com.example.ticket.domain.concert.repository.ConcertRepository;
 import com.example.ticket.domain.concert.repository.ConcertTimeRepository;
 import com.example.ticket.domain.seat.entity.Grade;
 import com.example.ticket.domain.seat.entity.Level;
+import com.example.ticket.domain.seat.entity.Seat;
 import com.example.ticket.domain.seat.repostiory.GradeRepository;
+import com.example.ticket.domain.seat.repostiory.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +29,7 @@ public class ConcertService {
     private final ConcertRepository concertRepository;
     private final ConcertTimeRepository concertTimeRepository;
     private final GradeRepository gradeRepository;
+    private final SeatRepository seatRepository;
 
     //존재하는 콘서트 리스트 가져오기
     public List<ConcertResponseDto> getConcertList() {
@@ -89,7 +93,7 @@ public class ConcertService {
 
         //등급별 가격 각각 저장
         List<Grade> grades = new ArrayList<>();
-        HashMap<Level, Long> hash = dto.getPrice();
+        Map<Level, Long> hash = dto.getPrice();
         for(Level level : hash.keySet()){
 
 
@@ -99,7 +103,22 @@ public class ConcertService {
                     .concert(concert)
                     .build());
         }
-        gradeRepository.saveAll(grades);
+        List<Grade> savedGrade = gradeRepository.saveAll(grades);
+
+        //좌석 정보 추가하는 로직
+
+//        List<Seat> seats = new ArrayList<>();
+//        Map<Level, int[]> seat = dto.getSeats();
+//        for(Level level: seat.keySet()){
+//            for(int i=seat.get(level)[0]; i<seat.get(level)[1]+1; i++){
+//                seats.add(Seat.builder()
+//                        .seatNum(Seat.changeSeatNum(i))
+//                        .grade(grades)
+//                        .concertTime(concertTimes)
+//                        .build());
+//            }
+//        }
+//        seatRepository.saveAll(seats);
     }
 }
 

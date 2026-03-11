@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Builder
 @Getter
@@ -25,7 +27,7 @@ public class Seat {
     private String seatNum;
 
     @Column(name = "state", nullable = false)
-    private boolean state;
+    private boolean state = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gradeId", nullable = false)
@@ -34,4 +36,9 @@ public class Seat {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scheduleId", nullable = false)
     private ConcertTime concertTime;
+
+    public void changeSeatNum(int num) {
+
+    }
+
 }

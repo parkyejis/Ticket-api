@@ -30,7 +30,7 @@ public class ConcertController {
         concertService.getConcertDetail(concertId);
     }
 
-    //수정하기
+    //수정하기 ->
     public void updateConcert(){
 
     }

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Builder
 @Getter
@@ -23,5 +24,5 @@ public class ConcertRequestDto {
     private final String imgURL;
 
     private final List<LocalDateTime> scheduleDate;
-    private final HashMap<Level, Long> price;
+    private final Map<Level, Long> price;
 }
