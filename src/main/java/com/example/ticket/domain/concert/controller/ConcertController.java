@@ -16,7 +16,7 @@ public class ConcertController {
     //생성
     @PostMapping("/")
     public void createConcert(@RequestBody ConcertRequestDto dto){
-        //concertService.createConcert(dto);
+        concertService.createConcert(dto);
     }
 
     //읽기

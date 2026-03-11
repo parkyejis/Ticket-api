@@ -1,5 +1,6 @@
 package com.example.ticket.domain.concert.service;
 
+import com.example.ticket.domain.concert.dto.request.ConcertRequestDto;
 import com.example.ticket.domain.concert.dto.response.ConcertDetailResponseDto;
 import com.example.ticket.domain.concert.dto.response.ConcertResponseDto;
 import com.example.ticket.domain.concert.entity.Concert;
@@ -54,6 +55,10 @@ public class ConcertService {
                         .map(ConcertTime::getSchedulePart)
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    public void createConcert(ConcertRequestDto dto) {
+
     }
 }
 
