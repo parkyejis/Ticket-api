@@ -10,6 +10,7 @@ import com.example.ticket.domain.seat.repostiory.GradeRepository;
 import com.example.ticket.domain.seat.repostiory.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class SeatService {
     private final GradeRepository gradeRepository;
 
     //레벨 별 가격 가져오기
+    @Transactional
     public GradeResponseDto getSeatPrice(Long concertId) {
         //공연 존재하는 지 확인
         if(!concertRepository.existsById(concertId)) throw new IllegalAccessException(null);
@@ -47,7 +49,8 @@ public class SeatService {
 
 
     //남은 좌석 가져오기
-    public void getRemainSeats(Long scheduleId){
+    @Transactional(readOnly = true)
+    public List<SeatResponseDto> getRemainSeats(Long scheduleId){
         //시간표에 맞는 좌석 list 가져오기
         List<Seat> seats = seatRepository.findAllByScheduleId(scheduleId);
         //좌석의 id, 번호, 상태 전달하기
@@ -58,5 +61,7 @@ public class SeatService {
                     .seatNum(s.getSeatNum())
                     .state(s.getState()).build());
         }
+
+        return response;
     }
 }
