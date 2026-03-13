@@ -6,6 +6,7 @@ import com.example.ticket.domain.reservation.dto.request.ReservationRequestDto;
 import com.example.ticket.domain.reservation.entity.Reservation;
 import com.example.ticket.domain.reservation.repository.ReservationRepository;
 import com.example.ticket.domain.seat.entity.Seat;
+import com.example.ticket.domain.seat.entity.SeatState;
 import com.example.ticket.domain.seat.repostiory.SeatRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,7 @@ public class ReservationService {
             for(int i=1;i<dto.getCount(); i++) {
                 Seat seat = seatRepository.findById(dto.getSeatId().get(i-1)).orElse(null);
                 //해당 좌석 상태 바꿔주기
-
+                seat.changeSeatState(SeatState.Fill);
                 r.add(Reservation.builder()
                                 .email(dto.getEmail())
                                 .password(dto.getPassword())
