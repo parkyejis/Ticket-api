@@ -1,6 +1,7 @@
 package com.example.ticket.domain.reservation.entity;
 
 import com.example.ticket.domain.concert.entity.Concert;
+import com.example.ticket.domain.concert.entity.ConcertTime;
 import com.example.ticket.domain.seat.entity.Level;
 import com.example.ticket.domain.seat.entity.Seat;
 import io.micrometer.core.annotation.Counted;
@@ -48,4 +49,8 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seatId", nullable = false)
     private Seat seat;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "scheduleId", nullable = false)
+    private ConcertTime schedule;
 }

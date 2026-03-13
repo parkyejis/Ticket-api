@@ -1,5 +1,6 @@
 package com.example.ticket.domain.reservation.controller;
 
+import com.example.ticket.domain.reservation.dto.request.LookforReservationRequestDto;
 import com.example.ticket.domain.reservation.dto.request.ReservationRequestDto;
 import com.example.ticket.domain.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,10 @@ public class ReservationController {
         reservationService.reserved(concertId, dto);
     }
 
-
-    public void getReservation() {
-
+    @GetMapping("/detail")
+    public void getReservation(@RequestBody LookforReservationRequestDto dto) {
+        //이메일 비밀번호를 통해 확인
+        reservationService.getReservation(dto);
     }
 
     public void changeReservation(){}

@@ -21,4 +21,5 @@ public class ReservationRequestDto {
     private final LocalDateTime schedule;
     private final Long count; //인원 수
     private final List<Long> seatId; //선택한 자리
+    private final Long scheduleId;
 }
