@@ -39,6 +39,8 @@ public class ReservationService {
 
             for(int i=1;i<dto.getCount(); i++) {
                 Seat seat = seatRepository.findById(dto.getSeatId().get(i-1)).orElse(null);
+                //해당 좌석 상태 바꿔주기
+
                 r.add(Reservation.builder()
                                 .email(dto.getEmail())
                                 .password(dto.getPassword())

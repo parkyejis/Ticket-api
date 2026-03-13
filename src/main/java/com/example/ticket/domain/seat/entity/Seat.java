@@ -26,8 +26,10 @@ public class Seat {
     @Column(name = "seatNum", nullable = false)
     private String seatNum;
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)
-    private boolean state = false;
+    private SeatState state = SeatState.Empty;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gradeId", nullable = false)
@@ -37,8 +39,8 @@ public class Seat {
     @JoinColumn(name = "scheduleId", nullable = false)
     private ConcertTime concertTime;
 
-    public void changeSeatNum(int num) {
-
+    public void changeSeatState(SeatState state) {
+        this.state = state;
     }
 
 }

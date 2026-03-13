@@ -2,6 +2,7 @@ package com.example.ticket.domain.seat.service;
 
 import com.example.ticket.domain.concert.repository.ConcertRepository;
 import com.example.ticket.domain.seat.dto.response.GradeResponseDto;
+import com.example.ticket.domain.seat.dto.response.SeatResponseDto;
 import com.example.ticket.domain.seat.entity.Grade;
 import com.example.ticket.domain.seat.entity.Level;
 import com.example.ticket.domain.seat.entity.Seat;
@@ -44,8 +45,18 @@ public class SeatService {
                 .build();
     }
 
+
+    //남은 좌석 가져오기
     public void getRemainSeats(Long scheduleId){
         //시간표에 맞는 좌석 list 가져오기
         List<Seat> seats = seatRepository.findAllByScheduleId(scheduleId);
+        //좌석의 id, 번호, 상태 전달하기
+        List<SeatResponseDto> response = new ArrayList<>();
+        for(Seat s :seats){
+            response.add(SeatResponseDto.builder()
+                    .seatId(s.getId())
+                    .seatNum(s.getSeatNum())
+                    .state(s.getState()).build());
+        }
     }
 }
