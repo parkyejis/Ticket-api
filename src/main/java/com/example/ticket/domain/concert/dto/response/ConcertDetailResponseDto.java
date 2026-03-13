@@ -1,6 +1,7 @@
 package com.example.ticket.domain.concert.dto.response;
 
 
+import com.example.ticket.domain.concert.entity.ConcertTime;
 import com.example.ticket.domain.concert.entity.concertState;
 import jakarta.persistence.*;
 import lombok.Builder;

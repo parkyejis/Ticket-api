@@ -1,10 +1,14 @@
 package com.example.ticket.domain.concert.controller;
 
 import com.example.ticket.domain.concert.dto.request.ConcertRequestDto;
+import com.example.ticket.domain.concert.dto.response.ConcertDetailResponseDto;
+import com.example.ticket.domain.concert.dto.response.ConcertResponseDto;
 import com.example.ticket.domain.concert.repository.ConcertRepository;
 import com.example.ticket.domain.concert.service.ConcertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,13 +25,16 @@ public class ConcertController {
 
     //읽기
     @GetMapping("/list")
-    public void getConcertList(){
-        concertService.getConcertList();
+    public List<ConcertResponseDto> getConcertList(){
+        List<ConcertResponseDto> responseDto = concertService.getConcertList();
+
+        return responseDto;
     }
 
     @GetMapping("/detail/{concert-id}")
-    public void getConcertDetail(@PathVariable(value="concert-id") Long concertId){
-        concertService.getConcertDetail(concertId);
+    public ConcertDetailResponseDto getConcertDetail(@PathVariable(value="concert-id") Long concertId){
+        ConcertDetailResponseDto responseDto = concertService.getConcertDetail(concertId);
+        return responseDto;
     }
 
     //수정하기 ->

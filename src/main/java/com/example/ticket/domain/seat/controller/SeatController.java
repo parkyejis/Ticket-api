@@ -16,7 +16,14 @@ public class SeatController {
     private final SeatService seatService;
 
     @GetMapping("/{concert-id}")
-    public void getSeatPrice(@PathVariable("concert-id")Long concertId){
-        seatService.getSeatPrice(concertId);
+    public GradeResponseDto getSeatPrice(@PathVariable("concert-id")Long concertId){
+        GradeResponseDto responseDto = seatService.getSeatPrice(concertId);
+
+        return responseDto;
+    }
+
+    @GetMapping("/remain/{schedule-id}")
+    public void getRemainSeat(@PathVariable("schedule-id)")Long scheduleId) {
+        seatService.getRemainSeats(scheduleId);
     }
 }
