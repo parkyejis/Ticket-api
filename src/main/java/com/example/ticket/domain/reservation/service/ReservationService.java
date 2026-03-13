@@ -4,6 +4,7 @@ import com.example.ticket.domain.concert.entity.Concert;
 import com.example.ticket.domain.concert.entity.ConcertTime;
 import com.example.ticket.domain.concert.repository.ConcertRepository;
 import com.example.ticket.domain.concert.repository.ConcertTimeRepository;
+import com.example.ticket.domain.reservation.dto.request.CheckUserRequestDto;
 import com.example.ticket.domain.reservation.dto.request.LookforReservationRequestDto;
 import com.example.ticket.domain.reservation.dto.request.ReservationRequestDto;
 import com.example.ticket.domain.reservation.dto.response.LookforReservationResponseDto;
@@ -135,4 +136,19 @@ public class ReservationService {
 
     }
 
+    @Transactional
+    public void deleteReservation(String reservationNum,String email, CheckUserRequestDto dto) {
+        List<Reservation> reservations = reservationRepository.findAllByReservationNum(reservationNum, email);
+        // 비번 확인
+        List<Long> Ids = new ArrayList<>();
+        for(Reservation r : reservations) {
+            if(!r.getPassword().equals(dto.getPassword())) {
+                throw new IllegalAccessException(null);
+            }
+            Ids.add(r.getId());
+        }
+
+        reservationRepository.deleteAllById(Ids);
+
+    }
 }

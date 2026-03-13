@@ -1,5 +1,6 @@
 package com.example.ticket.domain.reservation.controller;
 
+import com.example.ticket.domain.reservation.dto.request.CheckUserRequestDto;
 import com.example.ticket.domain.reservation.dto.request.LookforReservationRequestDto;
 import com.example.ticket.domain.reservation.dto.request.ReservationRequestDto;
 import com.example.ticket.domain.reservation.dto.response.LookforReservationResponseDto;
@@ -33,5 +34,8 @@ public class ReservationController {
 
     public void changeReservation(){}
 
-    public void deleteReservation(){}
+    @DeleteMapping("/delete/{user-email}/{reservationNum}")
+    public void deleteReservation(@PathVariable(name = "reservationNum") String reservationNum, @PathVariable(name = "user-email") String email, @RequestBody CheckUserRequestDto dto){
+        reservationService.deleteReservation(reservationNum, email, dto);
+    }
 }
