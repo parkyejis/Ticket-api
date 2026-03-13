@@ -17,7 +17,8 @@ public class ReservationRequestDto {
     private final String password;
     private final String name;
     private final Level reservedLevel;
+    private final Long price;
     private final LocalDateTime schedule;
     private final Long count; //인원 수
-    private final List<String> seatNum; //선택한 자리
+    private final List<Long> seatId; //선택한 자리
 }

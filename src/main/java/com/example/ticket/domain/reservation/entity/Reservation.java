@@ -1,6 +1,7 @@
 package com.example.ticket.domain.reservation.entity;
 
 import com.example.ticket.domain.concert.entity.Concert;
+import com.example.ticket.domain.seat.entity.Level;
 import com.example.ticket.domain.seat.entity.Seat;
 import io.micrometer.core.annotation.Counted;
 import jakarta.persistence.*;
@@ -32,7 +33,10 @@ public class Reservation {
     private String name;
 
     @Column(name = "reservedLevel", nullable = false)
-    private String reservedLevel;
+    private Level reservedLevel;
+
+    @Column(name = "price", nullable = false)
+    private Long price;
 
     @Column(name = "reservedNum", nullable = false)
     private String reservedNum;

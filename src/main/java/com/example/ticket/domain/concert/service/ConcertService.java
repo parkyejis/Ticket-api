@@ -65,9 +65,7 @@ public class ConcertService {
                 .progressTime(concert.getProgressTime())
                 .location(concert.getLocation())
                 .imgURL(concert.getImgURL())
-                .scheduleDate(concert.getSchedule().stream()
-                        .map(ConcertTime::getSchedulePart)
-                        .collect(Collectors.toList()))
+                .scheduleDate(concert.getSchedule())
                 .build();
     }
 
