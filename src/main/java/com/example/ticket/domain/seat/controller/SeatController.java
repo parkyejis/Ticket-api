@@ -1,5 +1,6 @@
 package com.example.ticket.domain.seat.controller;
 
+import com.example.ticket.domain.seat.dto.response.GradeResponseDto;
 import com.example.ticket.domain.seat.service.SeatService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
