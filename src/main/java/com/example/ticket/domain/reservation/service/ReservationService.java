@@ -146,6 +146,7 @@ public class ReservationService {
                 throw new IllegalAccessException(null);
             }
             Ids.add(r.getId());
+            r.getSeat().changeSeatState(SeatState.Empty);
         }
 
         reservationRepository.deleteAllById(Ids);
