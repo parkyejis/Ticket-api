@@ -1,7 +1,11 @@
 package com.example.ticket.domain.reservation.service;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
+
 import java.util.Random;
 
+@Service
 public class OrderNumberGenerator {
 
     // 1. 사용할 62개의 문자 재료들 (알파벳 대소문자 + 숫자)

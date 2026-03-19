@@ -47,10 +47,12 @@ public class ReservationService {
         //공연 정보 가져오기
         Concert concert = concertRepository.findById(concertId).orElseThrow(() -> new CustomException(CONCERT_NOT_FOUND));
         //이메일 형식 확인하기
-        //비밀번호 암호화 하기
+
         //공연에 대한 좌석 등급과 가격 확인하기 ->
-        //주문번호 동일하게 하기
+
         //예매번호 만들어주기
+        String newOrderNum = OrderNumberGenerator.createTicketNum();
+
         //선택 인원이 2이상인 경우 수에 맞게 예매 정보 저장하기
         ConcertTime concertTime = concertTimeRepository.findById(dto.getScheduleId()).orElseThrow(() -> new CustomException(CONCERT_NOT_FOUND));
 
@@ -67,11 +69,13 @@ public class ReservationService {
                         .name(dto.getName())
                         .reservedLevel(dto.getReservedLevel())
                         .price(dto.getPrice())
-                        .reservedNum("aAAa")
+                        .reservedNum(newOrderNum)  //주문번호 동일하게 하기
                         .concert(concert)
                         .seat(seat)
                         .schedule(concertTime)
                         .build();
+
+                //비밀번호 암호화 하기
                 reservation.encodePassword(passwordEncoder);
 
                 r.add(reservation);
@@ -89,7 +93,7 @@ public class ReservationService {
                 .name(dto.getName())
                 .reservedLevel(dto.getReservedLevel())
                 .price(dto.getPrice())
-                .reservedNum("aAAa")
+                .reservedNum(newOrderNum)
                 .concert(concert)
                 .seat(seat)
                 .schedule(concertTime)
