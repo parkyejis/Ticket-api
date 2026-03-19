@@ -33,31 +33,31 @@ public class SeatService {
     private final GradeRepository gradeRepository;
 
     //레벨 별 가격 가져오기
-    @Transactional
-    public GradeResponseDto getSeatPrice(Long concertId) {
-        //공연 존재하는 지 확인
-        if(!concertRepository.existsById(concertId)) {
-            throw new CustomException(CONCERT_NOT_FOUND);
-        }
-        //좌석 레벨 가격 알려주기
-        List<Grade> grades = gradeRepository.findAllByConsertId(concertId);
-        if(grades == null || grades.isEmpty()){
-            throw new CustomException(SEAT_NOT_FOUND);
-        }
-
-        Map<Level, Long> list = new HashMap<>();
-        Map<Level, Long> price = new HashMap<>();
-
-        for(Grade g: grades){
-            list.put(g.getLevel(), g.getId());
-            price.put(g.getLevel(), g.getPrice());
-        }
-
-        return GradeResponseDto.builder()
-                .level(list)
-                .price(price)
-                .build();
-    }
+//    @Transactional
+//    public GradeResponseDto getSeatPrice(Long concertId) {
+//        //공연 존재하는 지 확인
+//        if(!concertRepository.existsById(concertId)) {
+//            throw new CustomException(CONCERT_NOT_FOUND);
+//        }
+//        //좌석 레벨 가격 알려주기
+//        List<Grade> grades = gradeRepository.findAllByConsertId(concertId);
+//        if(grades == null || grades.isEmpty()){
+//            throw new CustomException(SEAT_NOT_FOUND);
+//        }
+//
+//        Map<Level, Long> list = new HashMap<>();
+//        Map<Level, Long> price = new HashMap<>();
+//
+//        for(Grade g: grades){
+//            list.put(g.getLevel(), g.getId());
+//            price.put(g.getLevel(), g.getPrice());
+//        }
+//
+//        return GradeResponseDto.builder()
+//                .level(list)
+//                .price(price)
+//                .build();
+//    }
 
 
     //남은 좌석 가져오기

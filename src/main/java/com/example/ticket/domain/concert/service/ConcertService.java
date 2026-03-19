@@ -32,7 +32,6 @@ public class ConcertService {
 
     private final ConcertRepository concertRepository;
     private final ConcertTimeRepository concertTimeRepository;
-    private final GradeRepository gradeRepository;
     private final SeatRepository seatRepository;
 
     //존재하는 콘서트 리스트 가져오기
@@ -64,6 +63,16 @@ public class ConcertService {
         Concert concert = concertRepository.findAllWithSchedule(concertId);
         if(concert == null) { throw new CustomException(CONCERT_NOT_FOUND); }
 
+        // concert의 좌석 별 가격으로 뽑아오기
+        Map<Level, Long> prices = concert.getSeats().stream()
+                .collect(Collectors.toMap(
+                        Seat::getLevel,
+                        Seat::getPrice,
+                        // 좌석 100개를 돌다 보면 "VIP"가 계속 나오겠죠? 그때 "기존 가격(oldPrice)"을
+                        // 그냥 유지할지 덮어쓸지 정하는 겁니다. 어차피 가격은 같으니 기존 거 유지!
+                        (oldPrice, newPrice) -> oldPrice
+                ));
+
         return ConcertDetailResponseDto.builder()
                 .title(concert.getTitle())
                 .Detail(concert.getDetail())
@@ -71,6 +80,8 @@ public class ConcertService {
                 .location(concert.getLocation())
                 .imgURL(concert.getImgURL())
                 .scheduleDate(concert.getSchedule())
+                .price(prices)
+                .seats(concert.getSeats())
                 .build();
     }
 

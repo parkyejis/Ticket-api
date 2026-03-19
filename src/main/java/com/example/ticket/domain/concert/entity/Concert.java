@@ -1,6 +1,7 @@
 package com.example.ticket.domain.concert.entity;
 
 import com.example.ticket.domain.seat.entity.Grade;
+import com.example.ticket.domain.seat.entity.Seat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,5 +56,8 @@ public class Concert {
 
     @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL)
     private List<ConcertTime> schedule = new ArrayList<>();
+
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL)
+    private List<Seat> seats = new ArrayList<>();
 
 }

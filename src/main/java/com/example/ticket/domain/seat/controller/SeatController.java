@@ -19,12 +19,12 @@ public class SeatController {
 
     private final SeatService seatService;
 
-    @GetMapping("/{concert-id}")
-    public ResponseEntity<BaseResponse<GradeResponseDto>> getSeatPrice(@PathVariable("concert-id")Long concertId){
-        GradeResponseDto responseDto = seatService.getSeatPrice(concertId);
-
-        return ResponseEntity.status(200).body(BaseResponse.success(responseDto));
-    }
+//    @GetMapping("/{concert-id}")
+//    public ResponseEntity<BaseResponse<GradeResponseDto>> getSeatPrice(@PathVariable("concert-id")Long concertId){
+//        GradeResponseDto responseDto = seatService.getSeatPrice(concertId);
+//
+//        return ResponseEntity.status(200).body(BaseResponse.success(responseDto));
+//    }
 
     @GetMapping("/remain/{schedule-id}")
     public ResponseEntity<BaseResponse<List<SeatResponseDto>>> getRemainSeat(@PathVariable("schedule-id)")Long scheduleId) {
