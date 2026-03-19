@@ -21,6 +21,8 @@ public class SeatController {
 
     private final SeatService seatService;
 
+
+
     @GetMapping("/{concert-id}")
     public ResponseEntity<BaseResponse<GradeResponseDto>> getSeatPrice(@PathVariable("concert-id")Long concertId){
         GradeResponseDto responseDto = seatService.getSeatPrice(concertId);
