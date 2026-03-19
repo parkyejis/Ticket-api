@@ -16,6 +16,7 @@ import com.example.ticket.domain.seat.entity.SeatState;
 import com.example.ticket.domain.seat.repostiory.SeatRepository;
 import com.example.ticket.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,7 @@ public class ReservationService {
     private final ConcertRepository concertRepository;
     private final SeatRepository seatRepository;
     private final ConcertTimeRepository concertTimeRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //예약하기
     @Transactional
@@ -59,17 +61,21 @@ public class ReservationService {
                 Seat seat = seatRepository.findById(dto.getSeatId().get(i-1)).orElse(null);
                 //해당 좌석 상태 바꿔주기
                 seat.changeSeatState(SeatState.Fill);
-                r.add(Reservation.builder()
-                                .email(dto.getEmail())
-                                .password(dto.getPassword())
-                                .name(dto.getName())
-                                .reservedLevel(dto.getReservedLevel())
-                                .price(dto.getPrice())
-                                .reservedNum("aAAa")
-                                .concert(concert)
-                                .seat(seat)
-                                .schedule(concertTime)
-                        .build());
+                Reservation reservation = Reservation.builder()
+                        .email(dto.getEmail())
+                        .password(dto.getPassword())
+                        .name(dto.getName())
+                        .reservedLevel(dto.getReservedLevel())
+                        .price(dto.getPrice())
+                        .reservedNum("aAAa")
+                        .concert(concert)
+                        .seat(seat)
+                        .schedule(concertTime)
+                        .build();
+                reservation.encodePassword(passwordEncoder);
+
+                r.add(reservation);
+
             }
 
             reservationRepository.saveAll(r);
@@ -95,8 +101,8 @@ public class ReservationService {
     public List<LookforReservationResponseDto> getReservation(LookforReservationRequestDto dto) {
         //이메일이 동일한 모든 예약정보 가져오기
         // 해당 이메일과 비밀번호 확인
-        List<Reservation> reservations = reservationRepository.findByEmail(dto.getEmail(), dto.getPassword());
-        if(reservations == null) { throw new CustomException(RESERVATION_NOT_FOUND); }
+        List<Reservation> reservations = reservationRepository.findByEmail(dto.getEmail());
+        if(reservations == null || reservations.isEmpty()) { throw new CustomException(RESERVATION_NOT_FOUND); }
 
         //이메일 비밀번호 일치하는 정보들 중에 공연 정보 확인
 
@@ -147,7 +153,7 @@ public class ReservationService {
     @Transactional
     public void deleteReservation(String reservationNum,String email, CheckUserRequestDto dto) {
         List<Reservation> reservations = reservationRepository.findAllByReservationNum(reservationNum, email);
-        if(reservations == null) {
+        if(reservations == null || reservations.isEmpty()) {
             throw new CustomException(RESERVATION_NOT_FOUND);
         }
         // 비번 확인
