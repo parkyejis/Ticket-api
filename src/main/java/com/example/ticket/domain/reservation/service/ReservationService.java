@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.example.ticket.global.exception.error.ConcertErrorCode.CONCERT_NOT_FOUND;
-import static com.example.ticket.global.exception.error.ReservationErrorCode.PASSWORD_MISMATCH;
-import static com.example.ticket.global.exception.error.ReservationErrorCode.RESERVATION_NOT_FOUND;
+import static com.example.ticket.global.exception.error.ReservationErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -41,13 +41,19 @@ public class ReservationService {
     private final ConcertTimeRepository concertTimeRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // 이메일 형식 검사하는 정규 표현식
+    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+
     //예약하기
     @Transactional
     public void reserved(Long concertId, ReservationRequestDto dto) {
         //공연 정보 가져오기
         Concert concert = concertRepository.findById(concertId).orElseThrow(() -> new CustomException(CONCERT_NOT_FOUND));
         //이메일 형식 확인하기
-
+        if(dto.getEmail() == null || !EMAIL_PATTERN.matcher(dto.getEmail()).matches()){
+            throw new CustomException(NOT_EMAIL_PATTERN);
+        }
         //공연에 대한 좌석 등급과 가격 확인하기 ->
 
         //예매번호 만들어주기
