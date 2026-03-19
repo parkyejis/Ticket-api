@@ -105,10 +105,16 @@ public class ReservationService {
         if(reservations == null || reservations.isEmpty()) { throw new CustomException(RESERVATION_NOT_FOUND); }
 
         //이메일 비밀번호 일치하는 정보들 중에 공연 정보 확인
+        List<Reservation> validReservation = reservations.stream()
+                .filter(r -> passwordEncoder.matches(dto.getPassword(), r.getPassword()))
+                .collect(Collectors.toList());
 
+        if (validReservation.isEmpty()) {
+            throw new CustomException(PASSWORD_MISMATCH);
+        }
 
         //공연정보(주문번호) 일치하는 예매정보끼리 묶어서 전달
-        Map<String, List<Reservation>> groupedMap = reservations.stream()
+        Map<String, List<Reservation>> groupedMap = validReservation.stream()
                 .collect(Collectors.groupingBy(Reservation::getReservedNum));
 
 
