@@ -57,7 +57,4 @@ public class Concert {
     @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL)
     private List<ConcertTime> schedule = new ArrayList<>();
 
-    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL)
-    private List<Seat> seats = new ArrayList<>();
-
 }

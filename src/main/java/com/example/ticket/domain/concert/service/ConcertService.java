@@ -64,7 +64,7 @@ public class ConcertService {
         if(concert == null) { throw new CustomException(CONCERT_NOT_FOUND); }
 
         // concert의 좌석 별 가격으로 뽑아오기
-        Map<Level, Long> prices = concert.getSeats().stream()
+        Map<Level, Long> prices = concert.getSchedule().get(0).getSeats().stream()
                 .collect(Collectors.toMap(
                         Seat::getLevel,
                         Seat::getPrice,
@@ -81,7 +81,6 @@ public class ConcertService {
                 .imgURL(concert.getImgURL())
                 .scheduleDate(concert.getSchedule())
                 .price(prices)
-                .seats(concert.getSeats())
                 .build();
     }
 
