@@ -165,7 +165,7 @@ public class ReservationService {
         // 비번 확인
         List<Long> Ids = new ArrayList<>();
         for(Reservation r : reservations) {
-            if(!r.getPassword().equals(dto.getPassword())) {
+            if(!passwordEncoder.matches(dto.getPassword(), r.getPassword())) {
                 throw new CustomException(PASSWORD_MISMATCH);
             }
             Ids.add(r.getId());
