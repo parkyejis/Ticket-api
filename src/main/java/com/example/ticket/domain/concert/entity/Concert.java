@@ -1,5 +1,6 @@
 package com.example.ticket.domain.concert.entity;
 
+import com.example.ticket.domain.seat.entity.Grade;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

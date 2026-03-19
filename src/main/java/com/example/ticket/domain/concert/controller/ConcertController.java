@@ -5,6 +5,7 @@ import com.example.ticket.domain.concert.dto.response.ConcertDetailResponseDto;
 import com.example.ticket.domain.concert.dto.response.ConcertResponseDto;
 import com.example.ticket.domain.concert.repository.ConcertRepository;
 import com.example.ticket.domain.concert.service.ConcertService;
+import com.example.ticket.domain.seat.service.SeatService;
 import com.example.ticket.global.response.BaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ConcertController {
 
     private final ConcertService concertService;
+    private final SeatService seatService;
 
     //생성
     @PostMapping("/")

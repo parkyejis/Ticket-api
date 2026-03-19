@@ -31,9 +31,16 @@ public class Seat {
     @Column(name = "state", nullable = false)
     private SeatState state = SeatState.Empty;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gradeId", nullable = false)
-    private Grade grade;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "grade", nullable = false)
+    private Level level;
+
+    @Column(name = "price", nullable = false)
+    private Long price;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "gradeId", nullable = false)
+//    private Grade grade;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scheduleId", nullable = false)

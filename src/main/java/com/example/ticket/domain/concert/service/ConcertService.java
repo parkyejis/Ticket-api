@@ -98,19 +98,64 @@ public class ConcertService {
         }
         concertTimeRepository.saveAll(concertTimes);
 
-        //등급별 가격 각각 저장
-        List<Grade> grades = new ArrayList<>();
-        Map<Level, Long> hash = dto.getPrice();
-        for(Level level : hash.keySet()){
 
+        //스케줄 리스트만큼 좌석 생성
+        List<Seat> seatList = new ArrayList<>();
+        //시간 schedule 별로 좌석 만들어야 하고, grade 도 추가해줘야함 (AB, CD, EF, GHIJ)
+        for(ConcertTime time : concertTimes){
+            Level currentLevel = Level.A;
+            Long currentPrice = 0L;
+            // 알파벨 루프
+            for(char row='A'; row <= 'J'; row++) {
 
-            grades.add(Grade.builder()
-                    .level(level)
-                    .price(hash.get(level))
-                    .concert(concert)
-                    .build());
+                switch (row){
+                    case 'A', 'B' -> {
+                        currentLevel = Level.VIP;
+                        currentPrice = dto.getPrice().get(currentLevel);
+                    }
+                    case 'C', 'D' -> {
+                        currentLevel = Level.R;
+                        currentPrice = dto.getPrice().get(currentLevel);
+                    }
+                    case 'E', 'F' -> {
+                        currentLevel = Level.S;
+                        currentPrice = dto.getPrice().get(currentLevel);
+                    }
+                    default -> { // H, I, J
+                        currentLevel = Level.A;
+                        currentPrice = dto.getPrice().get(currentLevel);
+                    }
+                }
+
+                for(int i=1; i<= 10; i++) {
+                    String seatNum = row + String.valueOf(i);
+
+                    Seat seat = Seat.builder()
+                            .seatNum(seatNum)
+                            .level(currentLevel)
+                            .price(currentPrice)
+                            .concertTime(time)
+                            .build();
+
+                    seatList.add(seat);
+                }
+            }
         }
-        List<Grade> savedGrade = gradeRepository.saveAll(grades);
+        seatRepository.saveAll(seatList);
+
+        //등급별 가격 각각 저장
+//        List<Grade> grades = new ArrayList<>();
+//        Map<Level, Long> hash = dto.getPrice();
+//        for(Level level : hash.keySet()){
+//
+//
+//            grades.add(Grade.builder()
+//                    .level(level)
+//                    .price(hash.get(level))
+//                    .concert(concert)
+//                    .build());
+//        }
+//        List<Grade> savedGrade = gradeRepository.saveAll(grades);
 
         //좌석 정보 추가하는 로직
 
