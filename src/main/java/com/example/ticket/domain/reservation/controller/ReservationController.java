@@ -6,6 +6,7 @@ import com.example.ticket.domain.reservation.dto.request.ReservationRequestDto;
 import com.example.ticket.domain.reservation.dto.response.LookforReservationResponseDto;
 import com.example.ticket.domain.reservation.service.ReservationService;
 import com.example.ticket.global.response.BaseResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
@@ -23,13 +24,13 @@ public class ReservationController {
 
     //예약하기
     @PostMapping("/{concert-id}")
-    public ResponseEntity<BaseResponse<Void>> createReservation(@PathVariable("concert-id")Long concertId, @RequestBody ReservationRequestDto dto){
+    public ResponseEntity<BaseResponse<Void>> createReservation(@PathVariable("concert-id")Long concertId, @Valid @RequestBody ReservationRequestDto dto){
         reservationService.reserved(concertId, dto);
         return ResponseEntity.status(201).body(BaseResponse.success(null));
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<BaseResponse<List<LookforReservationResponseDto>>> getReservation(@RequestBody LookforReservationRequestDto dto) {
+    public ResponseEntity<BaseResponse<List<LookforReservationResponseDto>>> getReservation(@Valid @RequestBody LookforReservationRequestDto dto) {
         //이메일 비밀번호를 통해 확인
         List<LookforReservationResponseDto> responseDtoList = reservationService.getReservation(dto);
         return ResponseEntity.status(200).body(BaseResponse.success(responseDtoList));
@@ -38,7 +39,7 @@ public class ReservationController {
     public void changeReservation(){}
 
     @DeleteMapping("/delete/{user-email}/{reservationNum}")
-    public ResponseEntity<BaseResponse<Void>> deleteReservation(@PathVariable(name = "reservationNum") String reservationNum, @PathVariable(name = "user-email") String email, @RequestBody CheckUserRequestDto dto){
+    public ResponseEntity<BaseResponse<Void>> deleteReservation(@PathVariable(name = "reservationNum") String reservationNum, @PathVariable(name = "user-email") String email, @Valid @RequestBody CheckUserRequestDto dto){
         reservationService.deleteReservation(reservationNum, email, dto);
         return ResponseEntity.status(204).body(BaseResponse.success(null));
     }

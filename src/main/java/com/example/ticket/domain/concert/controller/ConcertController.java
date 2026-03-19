@@ -6,6 +6,7 @@ import com.example.ticket.domain.concert.dto.response.ConcertResponseDto;
 import com.example.ticket.domain.concert.repository.ConcertRepository;
 import com.example.ticket.domain.concert.service.ConcertService;
 import com.example.ticket.global.response.BaseResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class ConcertController {
 
     //생성
     @PostMapping("/")
-    public ResponseEntity<BaseResponse<Void>> createConcert(@RequestBody ConcertRequestDto dto){
+    public ResponseEntity<BaseResponse<Void>> createConcert(@Valid @RequestBody ConcertRequestDto dto){
         concertService.createConcert(dto);
         return ResponseEntity.status(201).body(BaseResponse.success(null));
     }
