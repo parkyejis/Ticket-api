@@ -14,6 +14,7 @@ import com.example.ticket.domain.seat.entity.Level;
 import com.example.ticket.domain.seat.entity.Seat;
 import com.example.ticket.domain.seat.entity.SeatState;
 import com.example.ticket.domain.seat.repostiory.SeatRepository;
+import com.example.ticket.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.example.ticket.global.exception.error.ConcertErrorCode.CONCERT_NOT_FOUND;
+import static com.example.ticket.global.exception.error.ReservationErrorCode.PASSWORD_MISMATCH;
+import static com.example.ticket.global.exception.error.ReservationErrorCode.RESERVATION_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -38,14 +43,14 @@ public class ReservationService {
     @Transactional
     public void reserved(Long concertId, ReservationRequestDto dto) {
         //공연 정보 가져오기
-        Concert concert = concertRepository.findById(concertId).orElse(null);
+        Concert concert = concertRepository.findById(concertId).orElseThrow(() -> new CustomException(CONCERT_NOT_FOUND));
         //이메일 형식 확인하기
         //비밀번호 암호화 하기
         //공연에 대한 좌석 등급과 가격 확인하기 ->
         //주문번호 동일하게 하기
         //예매번호 만들어주기
         //선택 인원이 2이상인 경우 수에 맞게 예매 정보 저장하기
-        ConcertTime concertTime = concertTimeRepository.findById(dto.getScheduleId()).orElse(null);
+        ConcertTime concertTime = concertTimeRepository.findById(dto.getScheduleId()).orElseThrow(() -> new CustomException(CONCERT_NOT_FOUND));
 
         if (dto.getCount() > 1) {
             List<Reservation> r = new ArrayList<>();
@@ -91,7 +96,10 @@ public class ReservationService {
         //이메일이 동일한 모든 예약정보 가져오기
         // 해당 이메일과 비밀번호 확인
         List<Reservation> reservations = reservationRepository.findByEmail(dto.getEmail(), dto.getPassword());
+        if(reservations == null) { throw new CustomException(RESERVATION_NOT_FOUND); }
+
         //이메일 비밀번호 일치하는 정보들 중에 공연 정보 확인
+
 
         //공연정보(주문번호) 일치하는 예매정보끼리 묶어서 전달
         Map<String, List<Reservation>> groupedMap = reservations.stream()
@@ -139,11 +147,14 @@ public class ReservationService {
     @Transactional
     public void deleteReservation(String reservationNum,String email, CheckUserRequestDto dto) {
         List<Reservation> reservations = reservationRepository.findAllByReservationNum(reservationNum, email);
+        if(reservations == null) {
+            throw new CustomException(RESERVATION_NOT_FOUND);
+        }
         // 비번 확인
         List<Long> Ids = new ArrayList<>();
         for(Reservation r : reservations) {
             if(!r.getPassword().equals(dto.getPassword())) {
-                break;
+                throw new CustomException(PASSWORD_MISMATCH);
             }
             Ids.add(r.getId());
             r.getSeat().changeSeatState(SeatState.Empty);
